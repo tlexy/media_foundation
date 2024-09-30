@@ -4,3 +4,4 @@
 * [3](https://learn.microsoft.com/zh-cn/windows/win32/medfound/tutorial--using-the-sink-writer-to-encode-video)
 * [4](https://learn.microsoft.com/zh-cn/windows/win32/directshow/directshow)
 * [5](https://learn.microsoft.com/zh-cn/windows/win32/medfound/audio-video-capture-in-media-foundation)
+* [6](https://xiaozhuanlan.com/topic/2935740168)
