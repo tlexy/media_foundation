@@ -1,4 +1,4 @@
-#include <Windows.h>
+ï»¿#include <Windows.h>
 #include <mfapi.h>
 #include <mfidl.h>
 #include <Mfreadwrite.h>
@@ -97,21 +97,21 @@ HRESULT CreateVideoSourceReader(IMFMediaSource** ppSource, IMFSourceReader** rea
     {
         return hr;
     }
-    //ÉèÖÃ Media Type
+    //è®¾ç½® Media Type
     IMFMediaType* mediaType = NULL;
     MFCreateMediaType(&mediaType);
-    //ÉèÖÃÃ½ÌåÎªÊÓÆµ
+    //è®¾ç½®åª’ä½“ä¸ºè§†é¢‘
     mediaType->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Video);
-    //YUV¸ñÊ½Îª I420
+    //YUVæ ¼å¼ä¸º I420
     //https://learn.microsoft.com/zh-cn/windows/win32/medfound/video-subtype-guids
     mediaType->SetGUID(MF_MT_SUBTYPE, MFVideoFormat_I420);
-    //Ã¿¸öÊÓÆµÖ¡µÄ´óĞ¡Îª 640 * 480
+    //æ¯ä¸ªè§†é¢‘å¸§çš„å¤§å°ä¸º 640 * 480
     MFSetAttributeSize(mediaType, MF_MT_FRAME_SIZE, 640, 480);
     (*reader)->SetCurrentMediaType(MF_SOURCE_READER_FIRST_VIDEO_STREAM,
         NULL,
         mediaType);
 
-    //¶ÁÈ¡Êı¾İ
+    //è¯»å–æ•°æ®
     IMFSample* sample = NULL;
     DWORD index, flags;
     LONGLONG llVideoTs;
@@ -120,10 +120,10 @@ HRESULT CreateVideoSourceReader(IMFMediaSource** ppSource, IMFSourceReader** rea
         HRESULT ret = (*reader)->ReadSample(
             MF_SOURCE_READER_FIRST_VIDEO_STREAM,
             MF_SOURCE_READER_CONTROLF_DRAIN,
-            &index, //Êµ¼ÊÁ÷µÄindex
+            &index, //å®é™…æµçš„index
             &flags, //staus flags
-            &llVideoTs, //Ê±¼ä´Á
-            &sample); //´æ·Å²É¼¯µ½µÄÊÓÆµÊı¾İ
+            &llVideoTs, //æ—¶é—´æˆ³
+            &sample); //å­˜æ”¾é‡‡é›†åˆ°çš„è§†é¢‘æ•°æ®
         //std::cout << sample->Release();
         int a = 1;
         if (sample != NULL)

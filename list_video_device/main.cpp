@@ -1,4 +1,4 @@
-#include <Windows.h>
+﻿#include <Windows.h>
 #include <mfapi.h>
 #include <mfidl.h>
 #include <Mfreadwrite.h>
