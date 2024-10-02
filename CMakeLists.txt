@@ -4,7 +4,5 @@ project(media_foundation)
 
 add_definitions(-DUNICODE)
 
-file(GLOB SRCS 
-./*.cpp)
-
-add_executable(${PROJECT_NAME} ${SRCS})
+add_subdirectory(list_video_device)
+add_subdirectory(video_capture)
