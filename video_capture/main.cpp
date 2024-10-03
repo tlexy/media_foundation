@@ -97,6 +97,16 @@ HRESULT CreateVideoSourceReader(IMFMediaSource** ppSource, IMFSourceReader** rea
     {
         return hr;
     }
+    /*for (DWORD i = 0; ; i++)
+    {
+        IMFMediaType* pType = NULL;
+        hr = (*reader)->GetNativeMediaType(
+            (DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
+            i,
+            &pType
+        );
+        int a = 0;
+    }*/
     //设置 Media Type
     IMFMediaType* mediaType = NULL;
     MFCreateMediaType(&mediaType);
@@ -104,10 +114,10 @@ HRESULT CreateVideoSourceReader(IMFMediaSource** ppSource, IMFSourceReader** rea
     mediaType->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Video);
     //YUV格式为 I420
     //https://learn.microsoft.com/zh-cn/windows/win32/medfound/video-subtype-guids
-    mediaType->SetGUID(MF_MT_SUBTYPE, MFVideoFormat_I420);
+    hr = mediaType->SetGUID(MF_MT_SUBTYPE, MFVideoFormat_NV12);//MFVideoFormat_I420
     //每个视频帧的大小为 640 * 480
-    MFSetAttributeSize(mediaType, MF_MT_FRAME_SIZE, 640, 480);
-    (*reader)->SetCurrentMediaType(MF_SOURCE_READER_FIRST_VIDEO_STREAM,
+    hr = MFSetAttributeSize(mediaType, MF_MT_FRAME_SIZE, 640, 480);
+    hr = (*reader)->SetCurrentMediaType(MF_SOURCE_READER_FIRST_VIDEO_STREAM,
         NULL,
         mediaType);
 
@@ -116,6 +126,14 @@ HRESULT CreateVideoSourceReader(IMFMediaSource** ppSource, IMFSourceReader** rea
     DWORD index, flags;
     LONGLONG llVideoTs;
     bool running = true;
+    //MF_SOURCE_READER_CONTROLF_DRAIN
+    (*reader)->ReadSample(
+        MF_SOURCE_READER_FIRST_VIDEO_STREAM,
+        MF_SOURCE_READER_CONTROLF_DRAIN,
+        NULL,
+        NULL, 
+        NULL, 
+        NULL);
     while (running) {
         HRESULT ret = (*reader)->ReadSample(
             MF_SOURCE_READER_FIRST_VIDEO_STREAM,
