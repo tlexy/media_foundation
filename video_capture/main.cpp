@@ -12,6 +12,7 @@
 #pragma comment(lib, "Mf")
 
 IMFAttributes* pConfig = NULL;
+IMFActivate** ppDevices = NULL;
 
 void DebugShowDeviceNames(IMFActivate** ppDevices, UINT count)
 {
@@ -42,8 +43,6 @@ HRESULT CreateVideoCaptureDevice(IMFMediaSource** ppSource)
     *ppSource = NULL;
 
     UINT32 count = 0;
-
-    IMFActivate** ppDevices = NULL;
 
     // Create an attribute store to hold the search criteria.
     HRESULT hr = MFCreateAttributes(&pConfig, 1);
@@ -78,11 +77,11 @@ HRESULT CreateVideoCaptureDevice(IMFMediaSource** ppSource)
         }
     }
 
-    for (DWORD i = 0; i < count; i++)
+    /*for (DWORD i = 0; i < count; i++)
     {
         ppDevices[i]->Release();
     }
-    CoTaskMemFree(ppDevices);
+    CoTaskMemFree(ppDevices);*/
     return hr;
 }
 
@@ -127,17 +126,17 @@ HRESULT CreateVideoSourceReader(IMFMediaSource** ppSource, IMFSourceReader** rea
     LONGLONG llVideoTs;
     bool running = true;
     //MF_SOURCE_READER_CONTROLF_DRAIN
-    (*reader)->ReadSample(
+   /* (*reader)->ReadSample(
         MF_SOURCE_READER_FIRST_VIDEO_STREAM,
         MF_SOURCE_READER_CONTROLF_DRAIN,
         NULL,
         NULL, 
         NULL, 
-        NULL);
+        NULL);*/
     while (running) {
         HRESULT ret = (*reader)->ReadSample(
             MF_SOURCE_READER_FIRST_VIDEO_STREAM,
-            MF_SOURCE_READER_CONTROLF_DRAIN,
+            0, //MF_SOURCE_READER_CONTROLF_DRAIN???
             &index, //实际流的index
             &flags, //staus flags
             &llVideoTs, //时间戳
@@ -156,7 +155,8 @@ HRESULT CreateVideoSourceReader(IMFMediaSource** ppSource, IMFSourceReader** rea
 void main()
 {
     // Initialize the COM runtime.
-    HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
+    //HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
+    HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
     if (SUCCEEDED(hr))
     {
         // Initialize the Media Foundation platform.
